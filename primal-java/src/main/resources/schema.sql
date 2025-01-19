@@ -1,7 +1,7 @@
 create table if not exists dinosaur (
-    name varchar primary key,
+    id int primary key,
+    name varchar,
     weight int,
-    length int,
     height int,
     food varchar
 );
