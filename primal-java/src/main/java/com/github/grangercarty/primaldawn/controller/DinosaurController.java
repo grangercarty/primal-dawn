@@ -1,11 +1,14 @@
 package com.github.grangercarty.primaldawn.controller;
 
+import com.github.grangercarty.primaldawn.mapper.DinosaurRowMapper;
 import com.github.grangercarty.primaldawn.model.Dinosaur;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class DinosaurController {
@@ -27,7 +30,7 @@ public class DinosaurController {
         return dino;
     }
 
-    @PostMapping
+    @PostMapping("/dinosaur")
     public void postDino(@RequestBody Dinosaur dinosaur) {
         jdbcClient.sql("insert into dinosaur (id, name, weight, height, food) values (?,?,?,?,?)")
                 .param(dinosaur.getId())
@@ -36,5 +39,10 @@ public class DinosaurController {
                 .param(dinosaur.getHeight())
                 .param(dinosaur.getFood())
                 .update();
+    }
+
+    @GetMapping("/dinosaurs")
+    public List<Dinosaur> getAllDinosaurs() {
+        return jdbcClient.sql("select * from dinosaur").query(new DinosaurRowMapper()).list();
     }
 }
