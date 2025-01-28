@@ -2,6 +2,7 @@ package com.github.grangercarty.primaldawn.controller;
 
 import com.github.grangercarty.primaldawn.mapper.DinosaurRowMapper;
 import com.github.grangercarty.primaldawn.model.Dinosaur;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,11 @@ public class DinosaurController {
 
     public DinosaurController (JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
+    }
+
+    @Bean
+    public DinosaurRowMapper getDinosaurRowMapperBean() {
+        return new DinosaurRowMapper();
     }
 
     @GetMapping("/dino")
@@ -43,6 +49,6 @@ public class DinosaurController {
 
     @GetMapping("/dinosaurs")
     public List<Dinosaur> getAllDinosaurs() {
-        return jdbcClient.sql("select * from dinosaur").query(new DinosaurRowMapper()).list();
+        return jdbcClient.sql("select * from dinosaur").query(getDinosaurRowMapperBean()).list();
     }
 }
